@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 public interface ProjectWiseHrsCountRepo extends JpaRepository<ProjectWiseHrsCount, Integer>{
 	
 
-	@Query(value = " SELECT  project_header.project_id,project_header.project_title, COALESCE(\n" + 
+	@Query(value = " SELECT  project_header.project_id,project_header.project_title,project_header.project_est_manhrs , COALESCE(\n" + 
 			"        (\n" + 
 			"            CONCAT(\n" + 
 			"                FLOOR(SUM(t_work_log.work_hrs )/ 60),\n" + 

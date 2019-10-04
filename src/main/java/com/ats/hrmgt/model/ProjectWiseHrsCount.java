@@ -14,6 +14,19 @@ public class ProjectWiseHrsCount {
 	
 	
 	private String workHrs;
+	
+	private String projectEstMhrs;
+	
+
+
+	public String getProjectEstMhrs() {
+		return projectEstMhrs;
+	}
+
+
+	public void setProjectEstMhrs(String projectEstMhrs) {
+		this.projectEstMhrs = projectEstMhrs;
+	}
 
 
 	public int getProjectId() {
@@ -49,8 +62,11 @@ public class ProjectWiseHrsCount {
 	@Override
 	public String toString() {
 		return "ProjectWiseHrsCount [projectId=" + projectId + ", projectTitle=" + projectTitle + ", workHrs=" + workHrs
-				+ "]";
+				+ ", projectEstMhrs=" + projectEstMhrs + "]";
 	}
+
+
+	 
 	
 	
 	
