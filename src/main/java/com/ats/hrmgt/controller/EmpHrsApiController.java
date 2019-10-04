@@ -12,11 +12,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ats.hrmgt.leave.repo.EmpLeaveHistoryRepRepo;
+import com.ats.hrmgt.model.EmpLeaveHistoryRep;
 import com.ats.hrmgt.model.GetEmpWorkLog;
 import com.ats.hrmgt.model.Info;
+import com.ats.hrmgt.model.ProjectWiseHrsCount;
 import com.ats.hrmgt.model.WorkLog;
 import com.ats.hrmgt.model.WorkType;
 import com.ats.hrmgt.repository.GetEmpWorkLogRepo;
+import com.ats.hrmgt.repository.ProjectWiseHrsCountRepo;
 import com.ats.hrmgt.repository.WorkLogRepo;
 import com.ats.hrmgt.repository.WorkTypeRepo;
 
@@ -175,5 +179,54 @@ public class EmpHrsApiController {
 		return info;
 
 	}
+	
+	//dashboard
+	
+	@Autowired
+	EmpLeaveHistoryRepRepo empLeaveHistoryRepRepo;
+	
+	
+	@RequestMapping(value = { "/getLeaveCountOfAllEmployee" }, method = RequestMethod.GET)
+	public @ResponseBody List<EmpLeaveHistoryRep> getLeaveCountOfAllEmployee(
+		) {
+		List<EmpLeaveHistoryRep> list = new ArrayList<EmpLeaveHistoryRep>();
+
+		try {
+
+			list = empLeaveHistoryRepRepo.getEmpLeaveHistoryRepAll();
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+
+		return list;
+
+	}
+	
+	@Autowired
+	ProjectWiseHrsCountRepo projectWiseHrsCountRepo;
+	
+	@RequestMapping(value = { "/getProjectHrsCount" }, method = RequestMethod.GET)
+	public @ResponseBody List<ProjectWiseHrsCount> getProjectHrsCount(
+		) {
+		List<ProjectWiseHrsCount> list = new ArrayList<ProjectWiseHrsCount>();
+
+		try {
+
+			list = projectWiseHrsCountRepo.getProjectWiseHrsCount();
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+
+		return list;
+
+	}
+	
+	
+	
+	
 
 }
