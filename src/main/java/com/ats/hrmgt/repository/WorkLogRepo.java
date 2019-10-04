@@ -6,4 +6,6 @@ import com.ats.hrmgt.model.WorkLog;
 
 public interface WorkLogRepo extends JpaRepository<WorkLog, Integer> {
 
+	WorkLog findByWorkLogIdAndDelStatus(int workLogId, int i);
+
 }

@@ -5,6 +5,8 @@ import java.sql.Date;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
 public class GetEmpWorkLog {
 	
@@ -71,6 +73,8 @@ public class GetEmpWorkLog {
 	public void setEmpId(int empId) {
 		this.empId = empId;
 	}
+
+	@JsonFormat(locale = "Locale.ENGLISH", timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")// 
 
 	public Date getWorkDate() {
 		return workDate;

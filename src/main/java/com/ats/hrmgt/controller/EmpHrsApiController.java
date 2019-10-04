@@ -44,6 +44,53 @@ public class EmpHrsApiController {
 		return save;
 
 	}
+	
+	@Autowired 
+	GetEmpWorkLogRepo getEmpWorkLogRepo;
+
+	@RequestMapping(value = { "/getEmpWorkLogByProjId" }, method = RequestMethod.POST)
+	public @ResponseBody List<GetEmpWorkLog> getWorkTypeList(@RequestParam("empId") int empId,
+			@RequestParam("projId") int projId, @RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate) {
+
+		List<GetEmpWorkLog> list = new ArrayList<GetEmpWorkLog>();
+		
+	//	System.out.println("dates are"+fromDate+toDate+projId+empId);
+		try {
+			if(projId!=0 && fromDate!="" && toDate!="") {
+				list = getEmpWorkLogRepo.getGetEmpWorkLog(empId,projId,fromDate,toDate);
+			}else {
+				list = getEmpWorkLogRepo.getGetEmpWorkLog(empId);
+			}
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+
+		return list;
+
+	}
+	
+	
+	@RequestMapping(value = { "/getWorkLogById" }, method = RequestMethod.POST)
+	public @ResponseBody WorkLog getWorkLogById(@RequestParam("workLogId") int workLogId) {
+
+		WorkLog company = new WorkLog();
+		try {
+
+			company = workLogRepo.findByWorkLogIdAndDelStatus(workLogId, 1);
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+
+		return company;
+
+	}
+	
+	// **********************Add WorkType**************************************
+
 
 	@RequestMapping(value = { "/getWorkTypeList" }, method = RequestMethod.GET)
 	public @ResponseBody List<WorkType> getWorkTypeList() {
@@ -82,28 +129,7 @@ public class EmpHrsApiController {
 
 	}
 
-	GetEmpWorkLogRepo getEmpWorkLogRepo;
-
-	@RequestMapping(value = { "/getEmpWorkLogByProjId" }, method = RequestMethod.POST)
-	public @ResponseBody List<GetEmpWorkLog> getWorkTypeList(@RequestParam("empId") int empId,
-			@RequestParam("projId") int projId, @RequestParam("date") String date) {
-
-		List<GetEmpWorkLog> list = new ArrayList<GetEmpWorkLog>();
-		try {
-			if(projId!=0 && date!="") {
-				list = getEmpWorkLogRepo.getGetEmpWorkLog(empId,projId, date);
-			}else {
-				list = getEmpWorkLogRepo.getGetEmpWorkLog(empId);
-			}
-
-		} catch (Exception e) {
-
-			e.printStackTrace();
-		}
-
-		return list;
-
-	}
+	
 
 	@RequestMapping(value = { "/getWorkTypeById" }, method = RequestMethod.POST)
 	public @ResponseBody WorkType getCompanyById(@RequestParam("workTypeId") int workTypeId) {

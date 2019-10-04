@@ -28,8 +28,8 @@ public interface GetEmpWorkLogRepo extends JpaRepository<GetEmpWorkLog, Integer>
 			"            )\n" + 
 			"        ),\n" + 
 			"        0\n" + 
-			"    ) AS work_hrs FROM emp_info,project_header,t_work_log WHERE emp_info.emp_id=t_work_log.emp_id AND t_work_log.project_id=project_header.project_id AND t_work_log.del_status=1 AND t_work_log.is_active=1 AND t_work_log.project_id=:projId  AND t_work_log.emp_id=:empId AND t_work_log.work_date BETWEEN :date AND :date ", nativeQuery = true)
-	List<GetEmpWorkLog> getGetEmpWorkLog(@Param("empId") int empId,@Param("projId") int projId,@Param("date") String date);
+			"    ) AS work_hrs FROM emp_info,project_header,t_work_log WHERE emp_info.emp_id=t_work_log.emp_id AND t_work_log.project_id=project_header.project_id AND t_work_log.del_status=1 AND t_work_log.is_active=1 AND t_work_log.project_id=:projId  AND t_work_log.emp_id=:empId AND t_work_log.work_date BETWEEN :fromDate AND :toDate ", nativeQuery = true)
+	List<GetEmpWorkLog> getGetEmpWorkLog(@Param("empId") int empId,@Param("projId") int projId,@Param("fromDate") String fromDate,@Param("toDate") String toDate);
 	
 
 	@Query(value = "SELECT\n" + 
