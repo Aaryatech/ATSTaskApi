@@ -14,11 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ats.hrmgt.leave.repo.EmpLeaveHistoryRepRepo;
 import com.ats.hrmgt.model.EmpLeaveHistoryRep;
+import com.ats.hrmgt.model.GetEmpLogGrpByDate;
 import com.ats.hrmgt.model.GetEmpWorkLog;
 import com.ats.hrmgt.model.Info;
 import com.ats.hrmgt.model.ProjectWiseHrsCount;
 import com.ats.hrmgt.model.WorkLog;
 import com.ats.hrmgt.model.WorkType;
+import com.ats.hrmgt.repository.GetEmpLogGrpByDateRepo;
 import com.ats.hrmgt.repository.GetEmpWorkLogRepo;
 import com.ats.hrmgt.repository.ProjectWiseHrsCountRepo;
 import com.ats.hrmgt.repository.WorkLogRepo;
@@ -74,6 +76,61 @@ public class EmpHrsApiController {
 		return list;
 
 	}
+	
+	
+	@RequestMapping(value = { "/getWorkLogAdm" }, method = RequestMethod.POST)
+	public @ResponseBody List<GetEmpWorkLog> getWorkLogAdmOnload(@RequestParam("empIdList") List<String> empIdList,
+			  @RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate) {
+
+		List<GetEmpWorkLog> list = new ArrayList<GetEmpWorkLog>();
+		System.err.println("empIdList " +empIdList.toString());
+	//	System.out.println("dates are"+fromDate+toDate+projId+empId);
+		try {
+			if(empIdList.contains("ALL")) {
+				System.err.println("A");
+				list = getEmpWorkLogRepo.getWorkLogAdmOnload(fromDate, toDate);
+			}else {
+				System.err.println("B");
+				list = getEmpWorkLogRepo.getWorkLogAdmBySearch(fromDate, toDate, empIdList);
+			}
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+
+		return list;
+
+	}
+	
+	@Autowired GetEmpLogGrpByDateRepo getEmpLogGrpByDateRepo;
+	
+	@RequestMapping(value = { "/getWorkLogGrpByDate" }, method = RequestMethod.POST)
+	public @ResponseBody List<GetEmpLogGrpByDate> getWorkLogGrpByDate(@RequestParam("empIdList") List<String> empIdList,
+			  @RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate) {
+
+		List<GetEmpLogGrpByDate> list = new ArrayList<GetEmpLogGrpByDate>();
+		System.err.println("empIdList " +empIdList.toString());
+	//	System.out.println("dates are"+fromDate+toDate+projId+empId);
+		try {
+			if(empIdList.contains("ALL")) {
+				System.err.println("A");
+				list = getEmpLogGrpByDateRepo.getWorkLogAdmOnload(fromDate, toDate);
+			}else {
+				System.err.println("B");
+				list = getEmpLogGrpByDateRepo.getWorkLogAdmBySearch(fromDate, toDate, empIdList);
+			}
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+
+		return list;
+
+	}
+	
+	
 	
 	
 	@RequestMapping(value = { "/getWorkLogById" }, method = RequestMethod.POST)

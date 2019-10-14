@@ -53,6 +53,57 @@ public interface GetEmpWorkLogRepo extends JpaRepository<GetEmpWorkLog, Integer>
 			"    ) AS work_hrs FROM emp_info,project_header,t_work_log WHERE emp_info.emp_id=t_work_log.emp_id AND t_work_log.project_id=project_header.project_id AND t_work_log.del_status=1 AND t_work_log.is_active=1 AND t_work_log.emp_id=:empId  ", nativeQuery = true)
 	List<GetEmpWorkLog> getGetEmpWorkLog(@Param("empId") int empId);
 
+	//Sachin 14-10-2019 Next 2 Queries
 	
+	
+	@Query(value = "SELECT\n" + 
+			"t_work_log.work_log_id,\n" + 
+			"    t_work_log.log_type,\n" + 
+			"    t_work_log.project_id,\n" + 
+			"    t_work_log.work_type_id,\n" + 
+			"    t_work_log.emp_id,\n" + 
+			"    t_work_log.work_date,\n" + 
+			"     t_work_log.work_desc,\n" + 
+			"    project_header.project_title,emp_info.emp_fname,emp_info.emp_sname,\n" + 
+			"    COALESCE(\n" + 
+			"        (\n" + 
+			"            CONCAT(\n" + 
+			"                FLOOR(t_work_log.work_hrs / 60),\n" + 
+			"                ':',\n" + 
+			"                LPAD(MOD(t_work_log.work_hrs, 60), 2, '0')\n" + 
+			"            )\n" + 
+			"        ),\n" + 
+			"        0\n" + 
+			"    ) AS work_hrs FROM emp_info,project_header,t_work_log WHERE emp_info.emp_id=t_work_log.emp_id AND"
+			+ " t_work_log.project_id=project_header.project_id AND t_work_log.del_status=1 "
+			+ "AND t_work_log.is_active=1 "
+			+ " AND t_work_log.work_date BETWEEN :fromDate AND :toDate ", nativeQuery = true)
+	List<GetEmpWorkLog> getWorkLogAdmOnload(@Param("fromDate") String fromDate,@Param("toDate") String toDate);
+	
+	
+	@Query(value = "SELECT\n" + 
+			"t_work_log.work_log_id,\n" + 
+			"    t_work_log.log_type,\n" + 
+			"    t_work_log.project_id,\n" + 
+			"    t_work_log.work_type_id,\n" + 
+			"    t_work_log.emp_id,\n" + 
+			"    t_work_log.work_date,\n" + 
+			"     t_work_log.work_desc,\n" + 
+			"    project_header.project_title,emp_info.emp_fname,emp_info.emp_sname,\n" + 
+			"    COALESCE(\n" + 
+			"        (\n" + 
+			"            CONCAT(\n" + 
+			"                FLOOR(t_work_log.work_hrs / 60),\n" + 
+			"                ':',\n" + 
+			"                LPAD(MOD(t_work_log.work_hrs, 60), 2, '0')\n" + 
+			"            )\n" + 
+			"        ),\n" + 
+			"        0\n" + 
+			"    ) AS work_hrs FROM emp_info,project_header,t_work_log WHERE emp_info.emp_id=t_work_log.emp_id AND"
+			+ " t_work_log.project_id=project_header.project_id AND t_work_log.del_status=1 "
+			+ "AND t_work_log.is_active=1 "
+			+ " AND t_work_log.work_date BETWEEN :fromDate AND :toDate  and t_work_log.emp_id IN (:empIdList)", nativeQuery = true)
+	List<GetEmpWorkLog> getWorkLogAdmBySearch(@Param("fromDate") String fromDate,@Param("toDate") String toDate,
+			@Param("empIdList") List<String> empIdList);
 
 }
