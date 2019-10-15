@@ -26,7 +26,7 @@ public class WorkLog {
 
 	private int empId;
 
-	private Date workDate;
+	private String workDate;
 
 	private String workHrs;
 
@@ -89,11 +89,11 @@ public class WorkLog {
 	}
 
 	@JsonFormat(locale = "hi", timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
-	public Date getWorkDate() {
+	public String getWorkDate() {
 		return workDate;
 	}
-
-	public void setWorkDate(Date workDate) {
+	@JsonFormat(locale = "hi", timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
+	public void setWorkDate(String workDate) {
 		this.workDate = workDate;
 	}
 
