@@ -11,10 +11,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ats.hrmgt.model.ActivityRevenueReport;
+import com.ats.hrmgt.model.EmpWorkHrsRep;
 import com.ats.hrmgt.model.EmployeeOnBenchReport;
 import com.ats.hrmgt.model.EmployeeProjectWise;
 import com.ats.hrmgt.model.ProjectLocationWise; 
 import com.ats.hrmgt.repository.ActivityRevenueReportRepository;
+import com.ats.hrmgt.repository.EmpWorkHrsRepRepo;
 import com.ats.hrmgt.repository.EmployeeOnBenchRepository;
 import com.ats.hrmgt.repository.EmployeeProjectWiseRepository;
 import com.ats.hrmgt.repository.ProjectLocationWiseRepository;
@@ -97,6 +99,33 @@ public class ReportRestController {
 		try {
 
 			list = projectLocationWiseRepository.projectLocationwiseReport(compId);
+			 
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+
+		return list;
+
+	}
+	
+	@Autowired
+	EmpWorkHrsRepRepo empWorkHrsRepRepo;
+	
+	@RequestMapping(value = { "/projectExtrahrsEmpwiseReport" }, method = RequestMethod.POST)
+	public @ResponseBody List<EmpWorkHrsRep> projecthrsEmpwiseReport(@RequestParam("empIdList") List<String> empIdList,@RequestParam("fromDate") String fromDate,
+			@RequestParam("toDate") String toDate) {
+
+		List<EmpWorkHrsRep> list = new ArrayList<>();
+		try {
+			if(empIdList.contains("0")) {
+				list = empWorkHrsRepRepo.getGetEmpWorkLogAll(fromDate,toDate);
+			}
+			else {
+				list = empWorkHrsRepRepo.getGetEmpWorkLog(empIdList,fromDate,toDate);
+			}
+		
 			 
 
 		} catch (Exception e) {
