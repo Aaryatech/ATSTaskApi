@@ -29,10 +29,6 @@ public class EmailUtility {
 		
 		
 		try {
-			
-			
-
-			
 		final String emailSMTPserver = "smtp.gmail.com";
 		final String emailSMTPPort = "587";
 		final String mailStoreType = "imaps";
