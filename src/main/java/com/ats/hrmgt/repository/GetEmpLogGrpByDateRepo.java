@@ -18,13 +18,13 @@ public interface GetEmpLogGrpByDateRepo extends JpaRepository<GetEmpLogGrpByDate
 			"        emp_info.emp_fname," + 
 			"        emp_info.emp_sname," + 
 			"        group_concat(distinct project_header.project_title) as project_title," + 
-			"        sum(COALESCE(         (             CONCAT(                 FLOOR(t_work_log.work_hrs / 60)," + 
+			"       COALESCE(         (             CONCAT(                 FLOOR( sum(t_work_log.work_hrs )/ 60)," + 
 			"        ':'," + 
-			"        LPAD(MOD(t_work_log.work_hrs," + 
+			"        LPAD(MOD(sum(t_work_log.work_hrs)," + 
 			"        60)," + 
 			"        2," + 
 			"        '0')             )         )," + 
-			"        0     ) ) AS work_hrs " + 
+			"        0     )  AS work_hrs " + 
 			"    FROM" + 
 			"        emp_info," + 
 			"        t_work_log ,project_header" + 
@@ -44,13 +44,13 @@ public interface GetEmpLogGrpByDateRepo extends JpaRepository<GetEmpLogGrpByDate
 			"        emp_info.emp_fname," + 
 			"        emp_info.emp_sname," + 
 			"        group_concat(distinct project_header.project_title) as project_title," + 
-			"        sum(COALESCE(         (             CONCAT(                 FLOOR(t_work_log.work_hrs / 60)," + 
+			"        COALESCE(         (             CONCAT(                 FLOOR(sum(t_work_log.work_hrs) / 60)," + 
 			"        ':'," + 
-			"        LPAD(MOD(t_work_log.work_hrs," + 
+			"        LPAD(MOD(sum(t_work_log.work_hrs)," + 
 			"        60)," + 
 			"        2," + 
 			"        '0')             )         )," + 
-			"        0     ) ) AS work_hrs " + 
+			"        0     ) AS work_hrs " + 
 			"    FROM" + 
 			"        emp_info," + 
 			"        t_work_log ,project_header" + 
