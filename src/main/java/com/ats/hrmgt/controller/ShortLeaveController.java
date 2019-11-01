@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ats.hrmgt.common.EmailUtility;
 import com.ats.hrmgt.model.GetEmpShortLeaves;
+import com.ats.hrmgt.model.Info;
 import com.ats.hrmgt.model.ShortLeave;
 import com.ats.hrmgt.repository.GetEmpShortLeavesRepo;
 import com.ats.hrmgt.repository.ShortLeaveRepo;
@@ -32,6 +34,13 @@ public class ShortLeaveController {
 		try {
 
 			saveRes = shortLeaveRepo.saveAndFlush(shortLeave);
+			
+			for(int i=0;i<shortLeave.getMailNotifEmpList().size();i++) {
+				
+				
+				Info info=	EmailUtility.sendEmail("", "", shortLeave.getMailNotifEmpList().get(i+1), "Short Leave Application", "", shortLeave.getMailNotifEmpList().get(0) +" Applied Short Leave for "+shortLeave.getShLeaveDate());
+				
+			}
 
 		} catch (Exception e) {
 

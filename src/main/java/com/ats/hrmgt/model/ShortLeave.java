@@ -1,12 +1,14 @@
 package com.ats.hrmgt.model;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "t_short_leave")
@@ -35,6 +37,20 @@ public class ShortLeave {
 	private int makerUserId;
 	
 private int delStatus;
+
+
+@Transient
+List<String> mailNotifEmpList;
+
+public List<String> getMailNotifEmpList() {
+	return mailNotifEmpList;
+}
+
+public void setMailNotifEmpList(List<String> mailNotifEmpList) {
+	this.mailNotifEmpList = mailNotifEmpList;
+}
+
+
 	
 	
 
@@ -157,7 +173,8 @@ private int delStatus;
 				+ ", shLeaveEmpId=" + shLeaveEmpId + ", slDuration=" + slDuration + ", shLeaveYear=" + shLeaveYear
 				+ ", shLeaveMonth=" + shLeaveMonth + ", isApproved=" + isApproved + ", approverId=" + approverId
 				+ ", addDttime=" + addDttime + ", apprDttime=" + apprDttime + ", updateDttime=" + updateDttime
-				+ ", makerUserId=" + makerUserId + ", delStatus=" + delStatus + "]";
+				+ ", makerUserId=" + makerUserId + ", delStatus=" + delStatus + ", mailNotifEmpList=" + mailNotifEmpList
+				+ "]";
 	}
 	
 }

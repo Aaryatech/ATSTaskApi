@@ -262,7 +262,7 @@ public class LeaveApplicationController {
 										+ save.getLeaveNumDays() + " days, Please check for Approval",
 								11);
 						Info emailRes1 = EmailUtility.sendEmail("atsinfosoft@gmail.com", "atsinfosoft@123",
-								empInfo.getEmpEmail(), " HRMS Leave Application Status", "", msg);
+								empInfo.getEmpEmail(), " Leave Application Status", "", msg);
 
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -275,7 +275,7 @@ public class LeaveApplicationController {
 				String hrEmail = (setting.getValue());
 				System.out.println(hrEmail);
 				Info emailRes = EmailUtility.sendEmail("atsinfosoft@gmail.com", "atsinfosoft@123", hrEmail,
-						" HRMS Leave Application Status", "", " " + name + " has applied for leave from " + fromDate
+						" Leave Application Status", "", " " + name + " has applied for leave from " + fromDate
 								+ " to " + toDate + " for " + save.getLeaveNumDays() + " days");
 
 			}
@@ -564,7 +564,7 @@ public class LeaveApplicationController {
 
 					try {
 						if(emp.getExVar1()!="" && emp.getExVar1()!=null) {
-							Firebase.sendPushNotification(emp.getExVar1(), "HRMS", msg, 1);
+							Firebase.sendPushNotification(emp.getExVar1(), "", msg, 1);
 						}
 						
 						
@@ -574,7 +574,7 @@ public class LeaveApplicationController {
 					}
 
 					Info emailRes2 = EmailUtility.sendEmail("atsinfosoft@gmail.com", "atsinfosoft@123",
-							emp.getEmpEmail(), " HRMS Leave Application Status", "", msg);
+							emp.getEmpEmail(), "  Leave Application Status", "", msg);
 
 				} catch (Exception e) {
 					e.printStackTrace();
