@@ -18,12 +18,14 @@ import com.ats.hrmgt.model.GetEmpLogGrpByDate;
 import com.ats.hrmgt.model.GetEmpWorkLog;
 import com.ats.hrmgt.model.GetProjWorkLog;
 import com.ats.hrmgt.model.Info;
+import com.ats.hrmgt.model.ProjTypeWorkLog;
 import com.ats.hrmgt.model.ProjectWiseHrsCount;
 import com.ats.hrmgt.model.WorkLog;
 import com.ats.hrmgt.model.WorkType;
 import com.ats.hrmgt.repository.GetEmpLogGrpByDateRepo;
 import com.ats.hrmgt.repository.GetEmpWorkLogRepo;
 import com.ats.hrmgt.repository.GetProjWorkLogRepo;
+import com.ats.hrmgt.repository.ProjTypeWorkLogRepo;
 import com.ats.hrmgt.repository.ProjectWiseHrsCountRepo;
 import com.ats.hrmgt.repository.WorkLogRepo;
 import com.ats.hrmgt.repository.WorkTypeRepo;
@@ -155,6 +157,28 @@ public class EmpHrsApiController {
 		return list;
 
 	}
+	
+	@Autowired ProjTypeWorkLogRepo projTypeRepo;
+	@RequestMapping(value = { "/getProjTypeWorkLogAdm" }, method = RequestMethod.POST)
+	public @ResponseBody List<ProjTypeWorkLog> getProjTypeWorkLogAdm(@RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate) {
+
+		List<ProjTypeWorkLog> list = new ArrayList<ProjTypeWorkLog>();
+		try {
+				list = projTypeRepo.getProjTypeWorkLogAdmBySearch(fromDate, toDate);
+			
+				System.out.println("LogList--------------"+list);
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+
+		return list;
+
+	}
+	
+	/************************************************************************************/
+	
 	
 	@Autowired GetEmpLogGrpByDateRepo getEmpLogGrpByDateRepo;
 	
