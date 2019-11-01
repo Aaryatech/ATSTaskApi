@@ -16,12 +16,14 @@ import com.ats.hrmgt.leave.repo.EmpLeaveHistoryRepRepo;
 import com.ats.hrmgt.model.EmpLeaveHistoryRep;
 import com.ats.hrmgt.model.GetEmpLogGrpByDate;
 import com.ats.hrmgt.model.GetEmpWorkLog;
+import com.ats.hrmgt.model.GetProjWorkLog;
 import com.ats.hrmgt.model.Info;
 import com.ats.hrmgt.model.ProjectWiseHrsCount;
 import com.ats.hrmgt.model.WorkLog;
 import com.ats.hrmgt.model.WorkType;
 import com.ats.hrmgt.repository.GetEmpLogGrpByDateRepo;
 import com.ats.hrmgt.repository.GetEmpWorkLogRepo;
+import com.ats.hrmgt.repository.GetProjWorkLogRepo;
 import com.ats.hrmgt.repository.ProjectWiseHrsCountRepo;
 import com.ats.hrmgt.repository.WorkLogRepo;
 import com.ats.hrmgt.repository.WorkTypeRepo;
@@ -93,6 +95,57 @@ public class EmpHrsApiController {
 				System.err.println("B");
 				list = getEmpWorkLogRepo.getWorkLogAdmBySearch(fromDate, toDate, empIdList);
 			}
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+
+		return list;
+
+	}
+	/****************************************************************************/
+	
+	
+	@RequestMapping(value = { "/getEmpWorkLogAdm" }, method = RequestMethod.POST)
+	public @ResponseBody List<GetEmpWorkLog> getEmpWorkLogAdm(@RequestParam("projId") int projId,
+			  @RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate) {
+
+		List<GetEmpWorkLog> list = new ArrayList<GetEmpWorkLog>();
+		
+		System.out.println("dates are"+fromDate+toDate+projId+projId);
+		try {
+			
+				list = getEmpWorkLogRepo.getEmpWorkLogByProjId(projId, fromDate, toDate);
+		
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+
+		return list;
+
+	}
+	
+	@Autowired  GetProjWorkLogRepo getProjRepo;
+	//Mahendra 
+	//01-11-2019
+	@RequestMapping(value = { "/getProjWorkLog" }, method = RequestMethod.POST)
+	public @ResponseBody List<GetProjWorkLog> getProjWorkLog(@RequestParam("projIdList") List<String> projIdList,
+			  @RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate) {
+
+		List<GetProjWorkLog> list = new ArrayList<GetProjWorkLog>();
+		System.err.println("projIdList " +projIdList.toString());
+	//	System.out.println("dates are"+fromDate+toDate+projId+empId);
+		try {
+			if(projIdList.contains("ALL")) {
+				System.err.println("A");
+				list = getProjRepo.getProjWorkLogAdmOnload(fromDate, toDate);
+			}else {
+				System.err.println("B");
+				list = getProjRepo.getProjWorkLogAdmBySearch(fromDate, toDate, projIdList);
+			}
+			System.out.println("LogList--------------"+list);
 
 		} catch (Exception e) {
 
