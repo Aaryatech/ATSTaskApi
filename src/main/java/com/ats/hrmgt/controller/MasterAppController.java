@@ -3,6 +3,7 @@ package com.ats.hrmgt.controller;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,18 +15,21 @@ import com.ats.hrmgt.leave.model.ClaimDetail;
 import com.ats.hrmgt.leave.model.EmployeeLeaveDetail;
 import com.ats.hrmgt.leave.model.GetClaimTrailStatus;
 import com.ats.hrmgt.leave.model.GetLeaveStatus;
+import com.ats.hrmgt.leave.model.GetPendingLeaveCount;
 import com.ats.hrmgt.leave.model.LeaveDetail;
 import com.ats.hrmgt.leave.repo.ClaimApplyRepo;
 import com.ats.hrmgt.leave.repo.ClaimDetailRepo;
 import com.ats.hrmgt.leave.repo.ClaimRepository;
 import com.ats.hrmgt.leave.repo.GetClaimTrailStatusRepo;
 import com.ats.hrmgt.leave.repo.GetLeaveStatusRepo;
+import com.ats.hrmgt.leave.repo.GetPendingLeaveRepo;
 import com.ats.hrmgt.leave.repo.LeaveDetailRepo;
 import com.ats.hrmgt.model.CalenderYear;
 import com.ats.hrmgt.model.Company;
 import com.ats.hrmgt.model.DashboardCount;
 import com.ats.hrmgt.model.EmployeeInfo;
 import com.ats.hrmgt.model.Info;
+import com.ats.hrmgt.model.LeaveCount;
 import com.ats.hrmgt.model.Setting;
 import com.ats.hrmgt.repository.CalculateYearRepository;
 import com.ats.hrmgt.repository.DashboardRepo;
@@ -376,6 +380,24 @@ public class MasterAppController {
 		}
 
 		return leaveStatus;
+
+	}
+	
+	/**************************************************************************/
+	@Autowired GetPendingLeaveRepo leaveCountRepo;
+	@RequestMapping(value = { "/getPendingLeaveCount" }, method = RequestMethod.GET)
+	public @ResponseBody GetPendingLeaveCount  getPendingLeaveCount() {
+
+		GetPendingLeaveCount count = new GetPendingLeaveCount();
+		try {
+			 count = leaveCountRepo.getPendingLeaveCount();
+			
+			} catch (Exception e) { 
+
+			e.printStackTrace();
+		}
+
+		return count;
 
 	}
 	

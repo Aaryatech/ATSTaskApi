@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.ats.hrmgt.leave.model.GetPendingLeaveCount;
 import com.ats.hrmgt.leave.model.LeaveDetail;
 
 public interface LeaveDetailRepo extends JpaRepository<LeaveDetail, Integer>{
@@ -180,6 +181,9 @@ public interface LeaveDetailRepo extends JpaRepository<LeaveDetail, Integer>{
 			"WHERE \n" + 
 			"l.emp_id =:empId AND  l.emp_id =e.emp_id AND l.del_status=1 AND d.emp_dept_id = e.emp_dept_id AND lt.lv_type_id = l.lv_type_id ORDER BY l.leave_id DESC ", nativeQuery = true)
 	List<LeaveDetail> getLeaveListByEmp(@Param("empId") int empId);
+
+	
+	
 
 			
 }
