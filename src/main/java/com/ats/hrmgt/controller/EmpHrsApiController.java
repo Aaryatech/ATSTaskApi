@@ -338,6 +338,24 @@ public class EmpHrsApiController {
 
 	}
 	
+	/*************************************************************************************/
+	@RequestMapping(value = { "/getLeaveCountOfEmployee" }, method = RequestMethod.POST)
+	public @ResponseBody EmpLeaveHistoryRep getLeaveCountOfEmployee(@RequestParam int empId) {
+		EmpLeaveHistoryRep leaveCount = new EmpLeaveHistoryRep();
+
+		try {
+
+			leaveCount = empLeaveHistoryRepRepo.getEmpLeaveHistoryRep(empId);
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+
+		return leaveCount;
+
+	}
+	
 	@Autowired
 	ProjectWiseHrsCountRepo projectWiseHrsCountRepo;
 	

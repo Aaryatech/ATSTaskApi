@@ -75,5 +75,26 @@ public class ShortLeaveController {
 
 	}
 	
+	/*************************************************************************************/
+	@RequestMapping(value = { "/getEmpShortLeave" }, method = RequestMethod.POST)
+	public @ResponseBody GetEmpShortLeaves getEmpShortLeave(@RequestParam String fromDate, 
+			@RequestParam String toDate,
+			@RequestParam int empId) {
+
+		GetEmpShortLeaves shLeave = new GetEmpShortLeaves();
+		try {
+
+			
+			shLeave = getEmpShortLeavesRepo.getEmpShortLeavesInfo(fromDate, toDate, empId);
+			
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+		
+		return shLeave;
+
+	}
+	
 
 }
