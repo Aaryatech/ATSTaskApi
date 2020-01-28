@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -221,13 +222,14 @@ public class LeaveApplicationController {
 
 				String empIds = leaveApply.getRepToEmpIds();
 				String[] values = empIds.split(",");
-				System.err.println("emp ids for notification are::" + empIds);
+				System.err.println("emp ids for notification are::" + values);
 				List<String> al = new ArrayList<String>(Arrays.asList(values));
-
-				Set<String> set = new HashSet<>(al);
-				al.clear();
-				al.addAll(set);
-				System.err.println("emp ids for notification are:--------------:" + al.toString());
+ 				List<String> uniqueList = new ArrayList<String>(al.stream().distinct().collect(Collectors.toList()));
+ 
+				Set<String> set = new HashSet<>(uniqueList);
+				uniqueList.clear();
+				uniqueList.addAll(set);
+				 
 
 				SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
 				SimpleDateFormat sdf2 = new SimpleDateFormat("dd-MM-yyyy");
@@ -251,10 +253,10 @@ public class LeaveApplicationController {
 				String msg = empInfo1.getEmpFname() + " " + empInfo1.getEmpSname() + " has applied For Leave from "
 						+ fromDate + " to " + toDate + " for " + save.getLeaveNumDays() + " days Please Check";
 
-				for (int i = 0; i < al.size(); i++) {
+				for (int i = 0; i < uniqueList.size(); i++) {
 
 					EmployeeInfo empInfo = new EmployeeInfo();
-					empInfo = employeeInfoRepository.findByEmpIdAndDelStatus(Integer.parseInt(al.get(i)), 1);
+					empInfo = employeeInfoRepository.findByEmpIdAndDelStatus(Integer.parseInt(uniqueList.get(i)), 1);
 					try {
 
 						Firebase.sendPushNotification(empInfo.getExVar1(), "HRMS",
@@ -275,8 +277,8 @@ public class LeaveApplicationController {
 				String hrEmail = (setting.getValue());
 				System.out.println(hrEmail);
 				Info emailRes = EmailUtility.sendEmail("atsinfosoft@gmail.com", "atsinfosoft@123", hrEmail,
-						" Leave Application Status", "", " " + name + " has applied for leave from " + fromDate
-								+ " to " + toDate + " for " + save.getLeaveNumDays() + " days");
+						" Leave Application Status", "", " " + name + " has applied for leave from " + fromDate + " to "
+								+ toDate + " for " + save.getLeaveNumDays() + " days");
 
 			}
 
@@ -392,7 +394,7 @@ public class LeaveApplicationController {
 	LeaveDetailRepo leaveDetailRepo;
 	@Autowired
 	EmployeeLeaveDetailRepo employeeLeaveDetailRepo;
-	
+
 	@RequestMapping(value = { "getLeaveListByEmp" }, method = RequestMethod.POST)
 	public @ResponseBody List<LeaveDetail> getLeaveListByLocIdAndEmp(@RequestParam("empId") int empId) {
 
@@ -415,8 +417,8 @@ public class LeaveApplicationController {
 		return employeeInfo;
 
 	}
-	
-	//Akshay new code 20-08-2018
+
+	// Akshay new code 20-08-2018
 	@RequestMapping(value = { "getLeaveListByEmpId" }, method = RequestMethod.POST)
 	public @ResponseBody List<EmployeeLeaveDetail> getLeaveListByEmpId(@RequestParam("empId") int empId) {
 
@@ -425,7 +427,6 @@ public class LeaveApplicationController {
 		try {
 
 			employeeInfo = employeeLeaveDetailRepo.getLeaveListByEmp(empId);
-			 
 
 			System.out.println("info" + employeeInfo);
 		} catch (Exception e) {
@@ -474,8 +475,6 @@ public class LeaveApplicationController {
 		return list;
 
 	}
-	
-	
 
 	@RequestMapping(value = { "/updateLeaveStatus" }, method = RequestMethod.POST)
 	public @ResponseBody Info updateLeaveStatus(@RequestParam("leaveId") int leaveId,
@@ -501,13 +500,15 @@ public class LeaveApplicationController {
 
 				String empIds = authIds.getRepToEmpIds();
 				String[] values = empIds.split(",");
-				List<String> al = new ArrayList<String>(Arrays.asList(values));
-
+				List<String> uniqueList   = new ArrayList<String>(Arrays.asList(values));
+				System.err.println("emp list bef"+uniqueList.toString());
+				List<String> al = new ArrayList<String>(uniqueList.stream().distinct().collect(Collectors.toList()));
+				System.err.println("emp list af"+al.toString());
 				Set<String> set = new HashSet<>(al);
 				al.clear();
 				al.addAll(set);
 				al.add(String.valueOf(empId));
-				System.err.println("emp ids for notification are:--------------:" + al.toString());
+			
 
 				EmployeeInfo emp = new EmployeeInfo();
 
@@ -532,6 +533,14 @@ public class LeaveApplicationController {
 					e.printStackTrace();
 				}
 				String msg = null;
+
+				for (int i = 0; i < al.size(); i++) {
+ 					if (Integer.parseInt(al.get(i)) == empId) {
+						al.remove(i);
+						break;
+					}
+ 				}
+				System.err.println("emp ids for notification are:--------------:" + al.toString());
 
 				// Sending mail & Notification to the emp itself
 				try {
@@ -563,11 +572,9 @@ public class LeaveApplicationController {
 					}
 
 					try {
-						if(emp.getExVar1()!="" && emp.getExVar1()!=null) {
+						if (emp.getExVar1() != "" && emp.getExVar1() != null) {
 							Firebase.sendPushNotification(emp.getExVar1(), "", msg, 1);
 						}
-						
-						
 
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -575,6 +582,8 @@ public class LeaveApplicationController {
 
 					Info emailRes2 = EmailUtility.sendEmail("atsinfosoft@gmail.com", "atsinfosoft@123",
 							emp.getEmpEmail(), "  Leave Application Status", "", msg);
+					
+					System.err.println("emailRes2"+emailRes2.toString());
 
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -611,8 +620,8 @@ public class LeaveApplicationController {
 
 					} else if (status == 7) {
 
-						msg = emp.getEmpFname() + " " + emp.getEmpSname() + "  Leave from " + fromDate + " to " + toDate
-								+ " for " + leaveApply.getLeaveNumDays() + " days has been Cancelled ";
+						claimMsg = emp.getEmpFname() + " " + emp.getEmpSname() + "  Leave from " + fromDate + " to "
+								+ toDate + " for " + leaveApply.getLeaveNumDays() + " days has been Cancelled ";
 
 					}
 
@@ -623,18 +632,17 @@ public class LeaveApplicationController {
 						empInfo = employeeInfoRepository.findByEmpIdAndDelStatus(Integer.parseInt(al.get(i)), 1);
 
 						try {
-							if(emp.getExVar1()!="" && emp.getExVar1()!=null) {
-							Firebase.sendPushNotification(empInfo.getExVar1(), "HRMS", msg, 1);
+							if (emp.getExVar1() != "" && emp.getExVar1() != null) {
+								Firebase.sendPushNotification(empInfo.getExVar1(), "HRMS", claimMsg, 1);
 							}
-						}catch (Exception e) {
+						} catch (Exception e) {
 
 							e.printStackTrace();
 
 						}
 
-						
 						Info emailRes1 = EmailUtility.sendEmail("atsinfosoft@gmail.com", "atsinfosoft@123",
-								empInfo.getEmpEmail(), " HRMS Leave Application Status", "", msg);
+								empInfo.getEmpEmail(), " HRMS Leave Application Status", "", claimMsg);
 
 					}
 					Setting setting = new Setting();
@@ -694,11 +702,10 @@ public class LeaveApplicationController {
 		return info;
 
 	}
-	
-	
+
 	@Autowired
 	EmpLeaveHistoryRepRepo empLeaveHistoryRepRepo;
-	
+
 	@RequestMapping(value = { "/getLeaveHistoryRep" }, method = RequestMethod.POST)
 	public @ResponseBody List<EmpLeaveHistoryRep> getLeaveHistoryRep(@RequestParam("empId") int empId,
 			@RequestParam("calYrId") int calYrId) {
@@ -716,7 +723,5 @@ public class LeaveApplicationController {
 		return list;
 
 	}
-	
-	
 
 }

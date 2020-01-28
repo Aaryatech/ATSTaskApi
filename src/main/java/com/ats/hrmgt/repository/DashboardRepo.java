@@ -241,53 +241,53 @@ public interface DashboardRepo extends JpaRepository<DashboardCount, Integer> {
 			"            ELSE 0     \n" + 
 			"        END ) AS is_authorized,\n" + 
 			"        COALESCE(     (     SELECT\n" + 
-			"            COUNT(DISTINCT(cp.claim_id))     \n" + 
+			"            COUNT(DISTINCT(cp.ca_head_id))     \n" + 
 			"        FROM\n" + 
 			"            claim_authority ca,\n" + 
-			"            claim_apply cp     \n" + 
+			"            claim_apply_header cp     \n" + 
 			"        WHERE\n" + 
 			"            (             (                 ca.ca_ini_auth_emp_id = :empId \n" + 
-			"            AND cp.ex_int1 = 1             ) \n" + 
+			"            AND cp.claim_status = 1             ) \n" + 
 			"            OR(                 ca.ca_fin_auth_emp_id = :empId \n" + 
-			"            AND cp.ex_int1 = 2             )         ) \n" + 
+			"            AND cp.claim_status = 2             )         ) \n" + 
 			"            AND cp.emp_id = ca.emp_id ),\n" + 
 			"        0 ) AS pending_claim,\n" + 
 			"        COALESCE(     (         (         SELECT\n" + 
-			"            COUNT(DISTINCT(cp.claim_id))         \n" + 
+			"            COUNT(DISTINCT(cp.ca_head_id))         \n" + 
 			"        FROM\n" + 
 			"            claim_authority ca,\n" + 
-			"            claim_apply cp         \n" + 
+			"            claim_apply_header cp         \n" + 
 			"        WHERE\n" + 
 			"            ca.ca_ini_auth_emp_id = :empId \n" + 
 			"            AND cp.emp_id = ca.emp_id \n" + 
-			"            AND cp.ex_int1 IN(2) \n" + 
+			"            AND cp.claim_status IN(2) \n" + 
 			"            AND ca.ca_fin_auth_emp_id != ca.ca_ini_auth_emp_id     ) +(     SELECT\n" + 
-			"            COUNT(DISTINCT(cp.claim_id))     \n" + 
+			"            COUNT(DISTINCT(cp.ca_head_id))     \n" + 
 			"        FROM\n" + 
 			"            claim_authority ca,\n" + 
-			"            claim_apply cp     \n" + 
+			"            claim_apply_header cp     \n" + 
 			"        WHERE\n" + 
 			"            (ca.ca_fin_auth_emp_id = :empId) \n" + 
 			"            AND cp.emp_id = ca.emp_id \n" + 
-			"            AND cp.ex_int1 IN(1) \n" + 
+			"            AND cp.claim_status IN(1) \n" + 
 			"            AND ca.ca_fin_auth_emp_id != ca.ca_ini_auth_emp_id )+(     SELECT\n" + 
-			"            COUNT(DISTINCT(cp.claim_id))     \n" + 
+			"            COUNT(DISTINCT(cp.ca_head_id))     \n" + 
 			"        FROM\n" + 
 			"            claim_authority ca,\n" + 
-			"            claim_apply cp     \n" + 
+			"            claim_apply_header cp     \n" + 
 			"        WHERE\n" + 
 			"            ca.emp_id=:empId \n" + 
-			"            AND cp.ex_int1 in (2,1)\n" + 
+			"            AND cp.claim_status in (2,1)\n" + 
 			"            AND cp.emp_id = ca.emp_id  \n" + 
 			"            )     ),\n" + 
 			"        0 ) AS info_claim,\n" + 
 			"        COALESCE(     (     SELECT\n" + 
-			"            COUNT(DISTINCT(cp.claim_id))     \n" + 
+			"            COUNT(DISTINCT(cp.ca_head_id))     \n" + 
 			"        FROM\n" + 
-			"            claim_apply cp     \n" + 
+			"            claim_apply_header cp     \n" + 
 			"        WHERE\n" + 
 			"            cp.emp_id = :empId \n" + 
-			"            AND cp.ex_int1 IN(1, 2) ),\n" + 
+			"            AND cp.claim_status IN(1, 2) ),\n" + 
 			"        0 ) AS my_claim,\n" + 
 			"        COALESCE(     CASE \n" + 
 			"            WHEN(         COALESCE(             (             SELECT\n" + 
